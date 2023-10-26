@@ -21,13 +21,13 @@
     // 檢查 "levels" 參數是否存在
     if (params.has("levels")) {
       var levels = params.get("levels");
-      openApp(url + "/levels/" + levels, web + "/levels/" + levels);
+      openApp(url + "levels/" + levels, web + "levels/" + levels);
       // 在這裡執行相應的操作，因為 "levels" 參數存在
     }
     // 檢查 "profile" 參數是否存在
     else if (params.has("profile")) {
       var profile = params.get("profile");
-      openApp(url + "/profile/" + profile, web + "/profile/" + profile);
+      openApp(url + "profile/" + profile, web + "profile/" + profile);
       // 在這裡執行相應的操作，因為 "profile" 參數存在
     }
 
