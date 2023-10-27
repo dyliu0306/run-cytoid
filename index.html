@@ -2,86 +2,104 @@
 <html lang="en-us">
 
 <head>
-  <meta charset="utf-8">
-  <title>開啟Cytoid</title>
+    <meta charset="utf-8">
+    <title>開啟Cytoid</title>
 </head>
 
 <body>
-  <div>
-  </div>
-  <p></p>
-  <script>
-    // 獲取整個query字符串
-    var queryString = window.location.search;
-
-    // 解析query字符串成為一個物件
-    var params = new URLSearchParams(queryString);
-    var url = "cytoid://"
-    var web = "https://next.cytoid.io/"
-    // 檢查 "levels" 參數是否存在
-    if (params.has("levels")) {
-      var levels = params.get("levels");
-      openApp(url + "levels/" + levels, web + "levels/" + levels);
-      // 在這裡執行相應的操作，因為 "levels" 參數存在
-    }
-    // 檢查 "profile" 參數是否存在
-    else if (params.has("profile")) {
-      var profile = params.get("profile");
-      openApp(url + "profile/" + profile, web + "profile/" + profile);
-      // 在這裡執行相應的操作，因為 "profile" 參數存在
-    }
-
-
-    function openApp(appUrl, webUrl) {
-      // 避免啟動失敗的計時器
-      var timer = window.setTimeout(() => {
-        if (webUrl) {
-          window.location.href = webUrl;
+    <div>
+    </div>
+    <p></p>
+    <script>
+        var lang = window.navigator.language || window.navigator.userLanguage
+        var context;
+        if (lang.startsWith("en")) {
+            context = "Open this page in \"Cytoid\"?"
         }
-      }, 1000);
-
-      // 判斷瀏覽器來區分啟動方式
-      var ifr;
-      if (navigator.userAgent.match(/(Safari)/i)) {
-        if (navigator.userAgent.match(/(iPhone|iPad|iPod)/i)) {
-          window.clearTimeout(timer);
-          window.location.replace(appUrl);
-        } else if (navigator.userAgent.match(/Mobile/i)) {
-          window.clearTimeout(timer);
-          window.location.replace(appUrl);
-        } else {
-          ifr = document.createElement('iframe');
-
-          ifr.src = appUrl;
-          ifr.style.display = 'none';
-          document.body.appendChild(ifr);
+        else {
+            context = "是否開啟Cytoid?"
         }
-      } else if (navigator.userAgent.match(/Chrome/i)) {
-        window.clearTimeout(timer);
-        window.location.replace(appUrl);
-      } else {
-        ifr = document.createElement('iframe');
+        // 獲取整個query字符串
+        var queryString = window.location.search;
 
-        ifr.src = appUrl;
-        ifr.style.display = 'none';
-        document.body.appendChild(ifr);
-      }
-
-      // 用 onblur 來確認有沒有多跳一個是否啟動 APP 的確認視窗
-      window.onblur = () => {
-        window.clearTimeout(timer);
-        if (ifr) {
-          ifr.remove();
+        // 解析query字符串成為一個物件
+        var params = new URLSearchParams(queryString);
+        var url = "cytoid://"
+        var web = "https://next.cytoid.io/"
+        // 檢查 "levels" 參數是否存在
+        if (params.has("levels")) {
+            var levels = params.get("levels");
+            var choice = confirm(context)
+            if (choice) {
+                openApp(url + "levels/" + levels);
+                setTimeout(function () { opeWeb(web + "levels/" + levels); }, 800);
+            }
+            else {
+                opeWeb(web + "levels/" + levels);
+            }
+            // 在這裡執行相應的操作，因為 "levels" 參數存在
         }
-        window.close();
-      };
-
-      window.setTimeout(() => {
-        if (ifr) {
-          ifr.remove();
+        else {
+            alert("404 Page not found")
         }
-      }, 10000);
-    }
-  </script>
+
+
+        function opeWeb(webUrl) {
+            window.location.href = webUrl;
+        }
+
+
+        function openApp(appUrl, webUrl) {
+            // 避免啟動失敗的計時器
+            var timer = window.setTimeout(() => {
+                if (webUrl) {
+                    window.location.href = webUrl;
+                }
+            }, 1000);
+
+            // 判斷瀏覽器來區分啟動方式
+            var ifr;
+            if (navigator.userAgent.match(/(Safari)/i)) {
+                if (navigator.userAgent.match(/(iPhone|iPad|iPod)/i)) {
+                    window.clearTimeout(timer);
+                    window.location.replace(appUrl);
+                } else if (navigator.userAgent.match(/Mobile/i)) {
+                    window.clearTimeout(timer);
+                    window.location.replace(appUrl);
+                } else {
+                    ifr = document.createElement('iframe');
+
+                    ifr.src = appUrl;
+                    ifr.style.display = 'none';
+                    document.body.appendChild(ifr);
+                }
+            } else if (navigator.userAgent.match(/Chrome/i)) {
+                window.clearTimeout(timer);
+                window.location.replace(appUrl);
+            } else {
+                ifr = document.createElement('iframe');
+
+                ifr.src = appUrl;
+                ifr.style.display = 'none';
+                document.body.appendChild(ifr);
+            }
+
+            // 用 onblur 來確認有沒有多跳一個是否啟動 APP 的確認視窗
+            window.onblur = () => {
+                window.clearTimeout(timer);
+                if (ifr) {
+                    ifr.remove();
+                }
+                window.close();
+            };
+
+            window.setTimeout(() => {
+                if (ifr) {
+                    ifr.remove();
+                }
+            }, 10000);
+        }
+    </script>
 </body>
+
 </html>
