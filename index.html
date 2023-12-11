@@ -4,12 +4,19 @@
 <head>
     <meta charset="utf-8">
     <title>開啟Cytoid</title>
+    <style>
+        /* 添加CSS樣式，調整按鈕大小 */
+        button {
+            font-size: 10px; /* 調整字體大小 */
+            padding: 8px 15px; /* 調整內邊距 */
+        }
+    </style>
 </head>
 
 <body>
     <div>
     </div>
-    <p></p>
+    <p id="123" style="font-size: 24px;"></p>
     <script>
         var lang = window.navigator.language || window.navigator.userLanguage
         var context;
@@ -43,6 +50,38 @@
                 opeWeb(web + "levels/" + levels);
             }
             // 在這裡執行相應的操作，因為 "levels" 參數存在
+        }
+        else if (params.has("level1")) {
+            var level1 = params.get("level1");
+            var level2 = params.get("level2");
+            var level3 = params.get("level3");
+            var levels = [level1, level2, level3];
+            for (var i = 0; i < levels.length; i++) {
+                var buttonNumber = i + 1;
+                var button = document.createElement('button');
+                var page = document.getElementById("123")
+                button.innerText = buttonNumber;
+                var lang = window.navigator.language || window.navigator.userLanguage
+                var context;
+                if (lang.startsWith("en")) {
+                    context = "Select the mission number"
+                }
+                else {
+                    context = "選擇任務序號"
+                }
+                page.innerHTML=context
+                // 按鈕對應的連結
+                var link = `https://dyliu0306.github.io/run-cytoid?&levels=${levels[i]}`;
+                button.addEventListener('click', function (url) {
+                    return function () {
+                        window.location.href = url;
+                    };
+                }(link));
+
+                // 將按鈕添加到body中
+                document.body.appendChild(button);
+                // 在這裡執行相應的操作，因為 "levels" 參數存在
+            }
         }
         else {
             alert("404 Page not found")
